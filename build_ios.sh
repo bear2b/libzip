@@ -31,7 +31,7 @@ TOOLCHAIN=$XCODE_ROOT_DIR/Toolchains/XcodeDefault.xctoolchain
 CMAKE_C_COMPILER=$(xcrun -find cc)
 CMAKE_CXX_COMPILER=$(xcrun -find c++)
 
-BUILD_ARCHS_DEVICE="arm64 arm64e"
+BUILD_ARCHS_DEVICE="arm64"
 BUILD_ARCHS_ALL=($BUILD_ARCHS_DEVICE)
 
 CPP_DEV_TARGET_LIST=(miphoneos-version-min)
@@ -54,7 +54,9 @@ build_arch()
     #export CPP="$CC -E"
     export DEVROOT=$XCODE_ROOT_DIR/Platforms/$IOS_SDK_DEVICE.platform/Developer
     export SDKROOT=$DEVROOT/SDKs/$IOS_SDK_DEVICE$IOS_SDK_VERSION.sdk
-    export CFLAGS="-arch $1 -pipe -no-cpp-precomp -fembed-bitcode -stdlib=$CPP_STD_LIB -isysroot $SDKROOT -I$SDKROOT/usr/include/ -miphoneos-version-min=$IOS_SDK_TARGET"
+    export CFLAGS="-arch $1 -pipe -no-cpp-precomp -stdlib=$CPP_STD_LIB -fembed-bitcode -isysroot $SDKROOT -I$SDKROOT/usr/include/ -miphoneos-version-min=$IOS_SDK_TARGET"
+
+
      if [[ "$BUILD_TYPE" =~ "Debug" ]]; then
       export CFLAGS="$CFLAGS -Og"
      else
@@ -71,7 +73,7 @@ build_arch()
     -DCMAKE_CXX_COMPILER=$CMAKE_CXX_COMPILER \
     -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
     -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS \
-    -DCMAKE_CXX_FLAGS_RELEASE=-g0"
+    -DCMAKE_CXX_FLAGS_RELEASE=-g0" 
     
     echo "[!] Running CMake with -G 'Unix Makefiles' $CMAKE_CLI_INPUT"
     
